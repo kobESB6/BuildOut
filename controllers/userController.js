@@ -1,61 +1,43 @@
-const { User, Thought } = require ('..models');
-const userController = {
-   //Get all users  
-   asnyc getUsers(req, res) {
-    try {
-        const users = await User.find().populate('thoughts friends');
-        res.json(users);
-    }   catch (err) {
-        res.status(500).json(err);
-    }
-   },
+const { User } = require('../models');
 
-   //Get single User
-   async getSingleUser(req, res) {
+module.exports = {
+  // Get all users
+  async getUsers(req, res) {
     try {
-        const user = await User.findOne({_id: req.params.userId})
-        .populate('thoughts friends');
-        if (!user) {
-            return res.status(404).json({message: 'No user with that ID'});
-        }
-      res.json(user);
-
+      const users = await User.find().populate('friends thoughts');
+      res.json(users);
     } catch (err) {
-      res.status(500).json(err);  
+      res.status(500).json(err);
     }
-   },
-   //Create a new User
-   async createUser(req, res) {
-    const { Course, Student } = require('../models');
-    try {
-        const course = await User.create(req.body);
-        res.json(user);
-      } catch (err) {
-        console.log(err);
-        return res.status(500).json(err);
-      }
-
- 
   },
- 
-  }
-  // Delete a User
-  async deleteUser(req, res) {
+  
+  // Get a single user by ID
+  async getSingleUser(req, res) {
     try {
-      const user = await User.findOneAndDelete({ _id: req.params.userId });
+      const user = await User.findOne({ _id: req.params.userId })
+        .populate('friends thoughts');
 
       if (!user) {
         return res.status(404).json({ message: 'No user with that ID' });
       }
 
-      //Delete thoughts when user is deleted
-      await Thought.deleteMany({ _id: { $in: user.thoughts } });
-      res.json({ message: 'User and associated thoughts deleted!' });
+      res.json(user);
     } catch (err) {
       res.status(500).json(err);
     }
   },
-  // Update a user
+  
+  // Create a new user
+  async createUser(req, res) {
+    try {
+      const user = await User.create(req.body);
+      res.json(user);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
+  
+  // Update a user by ID
   async updateUser(req, res) {
     try {
       const user = await User.findOneAndUpdate(
@@ -73,29 +55,50 @@ const userController = {
       res.status(500).json(err);
     }
   },
-  //Add a friend to user's friend list
+  
+  // Delete a user and remove associated thoughts
+  async deleteUser(req, res) {
+    try {
+      const user = await User.findOneAndDelete({ _id: req.params.userId });
+
+      if (!user) {
+        return res.status(404).json({ message: 'No such user exists' });
+      }
+
+      // Bonus: Delete all associated thoughts if a user is deleted
+      await Thought.deleteMany({ _id: { $in: user.thoughts } });
+
+      res.json({ message: 'User and associated thoughts deleted!' });
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
+  
+  // Add a friend to the user's friend list
   async addFriend(req, res) {
     try {
       const user = await User.findOneAndUpdate(
         { _id: req.params.userId },
-        { $addToSet: { friends: req.params.friendId } }, // add friend if not already added
+        { $addToSet: { friends: req.params.friendId } },  // Add to friends array
         { new: true }
       ).populate('friends');
 
       if (!user) {
         return res.status(404).json({ message: 'No user with this ID!' });
       }
+
       res.json(user);
     } catch (err) {
       res.status(500).json(err);
     }
   },
-  //Remove a frriend from a user's friends
+  
+  // Remove a friend from the user's friend list
   async removeFriend(req, res) {
     try {
       const user = await User.findOneAndUpdate(
         { _id: req.params.userId },
-        { $pull: { friends: req.params.friendId } }, // remove friend from array
+        { $pull: { friends: req.params.friendId } },  // Remove from friends array
         { new: true }
       ).populate('friends');
 
@@ -109,5 +112,3 @@ const userController = {
     }
   },
 };
-module.exports = userController;
-
