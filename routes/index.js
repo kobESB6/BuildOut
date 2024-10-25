@@ -7,4 +7,4 @@ router.use((req, res) => {
   return res.send('Wrong routes!');
 });
 
-module.exports = router;
+module.exports = router();

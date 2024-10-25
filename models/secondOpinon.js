@@ -1,13 +1,13 @@
 const { Schema, Types } = require('mongoose');
 const dateFormat = require('../utils/dateFormat');
 
-const reactionSchema = new Schema(
+const secondOpinionSchema = new Schema(
   {
-    reactionId: {
+    secondOpinionId: {
       type: Schema.Types.ObjectId,
       default: () => new Types.ObjectId(), // Automatically generates an ObjectId
     },
-    reactionBody: {
+    secondOpinionBody: {
       type: String,
       required: true,
       maxlength: 280, // Reactions can have a max length of 280 characters
@@ -30,4 +30,4 @@ const reactionSchema = new Schema(
   }
 );
 
-module.exports = reactionSchema;
+module.exports = secondOpinionSchema;

@@ -1,6 +1,8 @@
+const { User }= require('./models');
 const express = require('express');
 const db = require('./config/connection');  // Connect to MongoDB
 const routes = require('./routes');  // Import all routes
+
 
 const PORT = process.env.PORT || 3001;  // Use PORT from environment or default to 3001
 const app = express();
@@ -18,3 +20,8 @@ db.once('open', () => {
     console.log(`API server running on port ${PORT}!`);
   });
 });
+
+
+    
+   
+ 

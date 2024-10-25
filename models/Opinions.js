@@ -1,10 +1,10 @@
 const { Schema, model } = require('mongoose');
-const reactionSchema = require('./Reaction');
+const reactionSchema = require('./secondOpinon');
 const dateFormat = require('../utils/dateFormat');
 
-const thoughtSchema = new Schema(
+const opinionSchema = new Schema(
   {
-    thoughtText: {
+    opinionText: {
       type: String,
       required: 'You need to leave a thought!',
       minlength: 1,
@@ -32,10 +32,10 @@ const thoughtSchema = new Schema(
 );
 
 // Virtual property to get the number of reactions for the thought
-thoughtSchema.virtual('reactionCount').get(function() {
+opinionSchema.virtual('reactionCount').get(function() {
   return this.reactions.length;
 });
 
-const Thought = model('Thought', thoughtSchema);
+const Opinion = model('Opinion', opinionSchema);
 
-module.exports = Thought;
+module.exports = Opinion;
