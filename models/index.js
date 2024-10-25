@@ -1,5 +1,6 @@
 const User = require('./User');
 const Opinion = require('./Opinion');
-const SecondOpinion = require('./secondOpinion')
+console.log(Opinion);
+const SecondOpinion = require('./SecondOpinon');
 
-module.exports = { User, Opinion, SecondOpinion };
+module.exports = { User, Opinion, SecondOpinion};

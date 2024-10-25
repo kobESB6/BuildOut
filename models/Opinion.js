@@ -1,12 +1,12 @@
 const { Schema, model } = require('mongoose');
-const reactionSchema = require('./secondOpinon');
+const reactionSchema = require('./SecondOpinion');
 const dateFormat = require('../utils/dateFormat');
 
 const opinionSchema = new Schema(
   {
     opinionText: {
       type: String,
-      required: 'You need to leave a thought!',
+      required: 'You need to leave a opinion!',
       minlength: 1,
       maxlength: 280
     },
@@ -20,7 +20,7 @@ const opinionSchema = new Schema(
       required: true
     },
     // Array of nested reactions based on reactionSchema
-    reactions: [reactionSchema]
+    secondOpinions: [reactionSchema]
   },
   {
     toJSON: {
@@ -31,9 +31,9 @@ const opinionSchema = new Schema(
   }
 );
 
-// Virtual property to get the number of reactions for the thought
-opinionSchema.virtual('reactionCount').get(function() {
-  return this.reactions.length;
+// Virtual property to get the number of reactions for the opinion
+opinionSchema.virtual('secondOpinionCount').get(function() {
+  return this.secondOpinions.length;
 });
 
 const Opinion = model('Opinion', opinionSchema);

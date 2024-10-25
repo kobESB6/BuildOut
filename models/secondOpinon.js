@@ -30,4 +30,4 @@ const secondOpinionSchema = new Schema(
   }
 );
 
-module.exports = secondOpinionSchema;
+module.exports = SecondOpinionSchema;
